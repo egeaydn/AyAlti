@@ -98,9 +98,9 @@ export default function Page() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen w-full">
-      <header className="relative z-10 pt-12 pb-8 pl-10">
-        <div className="w-full max-w-7xl mx-0 text-center">
+    <div className="relative min-h-screen w-full flex flex-col items-center">
+      <header className="relative z-10 w-full pt-12 pb-8 px-6">
+        <div className="w-full max-w-5xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-normal text-gray-100 mb-3">
             Yalnız değilsin.
           </h1>
@@ -110,8 +110,8 @@ export default function Page() {
         </div>
       </header>
 
-      <main className="relative z-10 pb-32 px-6">
-        <div className="w-full max-w-7xl mx-0">
+      <main className="relative z-10 w-full pb-32 px-6">
+        <div className="w-full max-w-5xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             {mockPosts.map((post) => (
               <PostCard key={post.id} {...post} />
