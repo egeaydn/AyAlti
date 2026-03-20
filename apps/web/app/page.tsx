@@ -98,10 +98,9 @@ export default function Page() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen">
-      {/* Header */}
-      <header className="relative z-10 pt-12 pb-8 px-4">
-        <div className="max-w-5xl mx-auto text-center">
+    <div className="relative min-h-screen w-full">
+      <header className="relative z-10 pt-12 pb-8 pl-10">
+        <div className="w-full max-w-7xl mx-0 text-center">
           <h1 className="text-4xl md:text-5xl font-normal text-gray-100 mb-3">
             Yalnız değilsin.
           </h1>
@@ -111,10 +110,9 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Feed - Masonry Grid */}
-      <main className="relative z-10 pb-32 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
+      <main className="relative z-10 pb-32 px-6">
+        <div className="w-full max-w-7xl mx-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             {mockPosts.map((post) => (
               <PostCard key={post.id} {...post} />
             ))}
@@ -122,10 +120,8 @@ export default function Page() {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
       <BottomNav onOpenShareAction={() => setIsShareModalOpen(true)} />
 
-      {/* Share Modal */}
       <ShareModal 
         isOpen={isShareModalOpen} 
         onClose={() => setIsShareModalOpen(false)} 

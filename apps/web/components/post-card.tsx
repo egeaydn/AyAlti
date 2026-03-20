@@ -27,19 +27,19 @@ export function PostCard({ id, content, repliesCount, createdAt }: PostCardProps
   return (
     <div 
       className="group relative bg-[#1a1f2e]/60 backdrop-blur-sm rounded-2xl p-5 
-                 border border-white/5 hover:border-white/10
-                 transition-all duration-300 cursor-pointer break-inside-avoid mb-4"
+                 border border-white/5 hover:border-white/10 w-full h-full
+                 transition-all duration-300 cursor-pointer flex flex-col"
       onClick={() => window.location.href = `/post/${id}`}
     >
       {/* İçerik */}
-      <div className="mb-4">
+      <div className="mb-4 flex-1">
         <p className="text-gray-200/90 leading-relaxed whitespace-pre-wrap text-[15px]">
           {content}
         </p>
       </div>
 
       {/* Alt kısım: zaman ve cevap sayısı */}
-      <div className="flex items-center justify-between text-gray-500 text-sm">
+      <div className="flex items-center justify-between text-gray-500 text-sm mt-auto">
         <span>{getTimeAgo(createdAt)}</span>
         
         <div className="flex items-center gap-1.5">
