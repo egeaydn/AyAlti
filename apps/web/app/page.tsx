@@ -10,51 +10,87 @@ import { ShareModal } from "@/components/share-modal";
 const mockPosts = [
   {
     id: "1",
-    content: "Artık hiçbir şeye enerjim kalmadı. Sabah kalkmak bile zor geliyor. Herkes etrafımda mutlu görünüyor ama ben sadece yorgunum.",
-    mood: "Yorgunum",
-    nickname: "Gece Yolcusu",
-    repliesCount: 12,
-    createdAt: new Date("2024-03-20T02:15:00"),
+    content: "İyi bayramlar",
+    nickname: "Anonim",
+    repliesCount: 0,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 gün önce
   },
   {
     id: "2",
-    content: "En yakın arkadaşım bile beni anlamadı. Söylediği sözler hala aklımda dönüp duruyor.",
-    mood: "Kırgınım",
-    nickname: "Sessiz Biri",
-    repliesCount: 8,
-    createdAt: new Date("2024-03-20T01:30:00"),
+    content: "kimse beni sevmiyor",
+    nickname: "Anonim",
+    repliesCount: 6,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 gün önce
   },
   {
     id: "3",
-    content: "Yarın olacak şeyler için çok endişeleniyorum. Uyuyamıyorum, kafam sürekli en kötü senaryoları düşünüyor.",
-    mood: "Kaygılıyım",
-    nickname: "Ay Işığı",
-    repliesCount: 15,
-    createdAt: new Date("2024-03-20T00:45:00"),
+    content: "Son sınıf yazılım mühendisliği okuyorum backend Java frontend react ytte ve pythona hakim olmama rağmen Vibe coding ileti, yüzünden stajımda da kendi projelemde de tamamen Vibe coding çalışmadan vızgeçemiyorum bu da vicdani bir yük olmaya başladı",
+    nickname: "Anonim",
+    repliesCount: 3,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
   },
   {
     id: "4",
-    content: "İçimde biriken öfkeyi kontrol edemiyorum. Küçük şeyler bile beni tetikliyor, sonra pişman oluyorum.",
-    mood: "Öfkeliyim",
-    nickname: "Kayıp Uyku",
-    repliesCount: 6,
-    createdAt: new Date("2024-03-19T23:20:00"),
+    content: "Mimarlık okudum, computational designer olarak çalıştım. Bu sırada programlama öğrendim. Algoritmayla çalıştım. Şu anda beni bir web application projesine aktılar. 0'dan bir platform yapılıyor. Bu alanda çok sınırlı bilgim var ama mimansının oluşturuyoruz. Hangi database kullanılacak, backend frontend dili, hangi deployment method nereye deploy edilecek vs. Hepsi ilk kez duydugum şeyler. Sizce bu alandn devam etmeli miyim, mesleğimi nasıl şey dönüştürebilirim. Bu yaptığım işe ne deniyor",
+    nickname: "Anonim",
+    repliesCount: 1,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
   },
   {
     id: "5",
-    content: "Hiçbir şey hissetmiyorum artık. Ne mutlu ne üzgün. Sadece boşlukta sürükleniyorum.",
-    mood: "Boşluktayım",
-    nickname: "Derin Nefes",
-    repliesCount: 10,
-    createdAt: new Date("2024-03-19T22:50:00"),
+    content: "Spariş üzerine kod yazıyormusunuz",
+    nickname: "Anonim",
+    repliesCount: 1,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
   },
   {
     id: "6",
-    content: "Bugün güzel bir gün geçirdim ama kimseye anlatacak kimse yok. Sadece bu mutluluğu paylaşmak istedim.",
-    mood: "Sadece anlatmak istiyorum",
-    nickname: "Gece Yolcusu",
-    repliesCount: 18,
-    createdAt: new Date("2024-03-19T22:10:00"),
+    content: "Şu anda bi web uygulama üzerinde çalışıyorum. Neredeyse bitmek üzere ama dönere altyapısını nasıl kuracağım, yurtıçı-yurtdışi şirket nasıl bilmek Yazılım istiyorum ama daha önce ne bilgisayar ne yazılım hiçbir bilgim yok ama buna uygun olan kullanıcılara da bu süreçte güvedeye yol. Tüm bu süreci cephen yiyerek yürütmeye çalışıyorum ve günlerdir stresten kıvranıyorum",
+    nickname: "Anonim",
+    repliesCount: 0,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "7",
+    content: "Python çalışıyorum ama bir türlü öğrenemedim yıllardır çalışıyorum ama hala bir arpa boyu yol alamadım . Ve bunu hemen hatırletim lazım çünkü okulum bitiyor",
+    nickname: "Anonim",
+    repliesCount: 1,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "8",
+    content: "Şuan 12. Sınıfım YKS Çalışıyorum dedim yazılım ise başlıcam hiçbir fikrim yok derken herşeyden vazgeçtim yaşamak istemiyordm bi anda yurt dışından kabul aldım 2 senedir yurt dışında okuyorum",
+    nickname: "Anonim",
+    repliesCount: 2,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "9",
+    content: "Test için yazıyorum",
+    nickname: "Anonim",
+    repliesCount: 0,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "10",
+    content: "Liverpool maçı ne olur?",
+    nickname: "Anonim",
+    repliesCount: 1,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "11",
+    content: "Adem abi saat 12 de halı saha maçı var gelir misin",
+    nickname: "Anonim",
+    repliesCount: 0,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "12",
+    content: "yillardır biseyle savaşıyorum ama adını koyamıyorum canım bisey yapmak istemiyor aileset mevzular utangaçlık dış görünüşü beğenmeme derken kendimi hiep kötü hissettim derslerime odaklanamadım mezuna kaldım bir yandan ile baskısı derken herşeyden vazgeçtim yaşamak istemiyordum bi anda",
+    nickname: "Anonim",
+    repliesCount: 0,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
   },
 ];
 
@@ -64,23 +100,25 @@ export default function Page() {
   return (
     <div className="relative min-h-screen">
       {/* Header */}
-      <header className="relative z-10 pt-8 pb-6 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-3xl font-bold text-[var(--accent-moon)] glow-text mb-2">
-            AyAltı
+      <header className="relative z-10 pt-12 pb-8 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-normal text-gray-100 mb-3">
+            Yalnız değilsin.
           </h1>
-          <p className="text-[var(--text-secondary)] text-sm">
-            Burası anonim bir gece duvarı. İçini dökebilir, başkasına iyi gelebilirsin.
+          <p className="text-gray-400 text-base">
+            Belki senin bir cümlen, birinin gecesini aydınlatır.
           </p>
         </div>
       </header>
 
-      {/* Feed */}
+      {/* Feed - Masonry Grid */}
       <main className="relative z-10 pb-32 px-4">
-        <div className="max-w-2xl mx-auto space-y-4">
-          {mockPosts.map((post) => (
-            <PostCard key={post.id} {...post} />
-          ))}
+        <div className="max-w-5xl mx-auto">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
+            {mockPosts.map((post) => (
+              <PostCard key={post.id} {...post} />
+            ))}
+          </div>
         </div>
       </main>
 
