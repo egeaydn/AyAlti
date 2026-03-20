@@ -2,6 +2,7 @@
   "name": "AyAltı",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "npm@10.0.0",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
