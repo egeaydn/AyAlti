@@ -1,10 +1,6 @@
-
 "use client";
 
-import { useState } from "react";
 import { PostCard } from "@/components/post-card";
-import { BottomNav } from "@/components/bottom-nav";
-import { ShareModal } from "@/components/share-modal";
 
 // Mock data - sonra API'den gelecek
 const mockPosts = [
@@ -95,37 +91,31 @@ const mockPosts = [
 ];
 
 export default function Page() {
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-
   return (
     <div className="relative min-h-screen w-full flex flex-col items-center">
       <header className="relative z-10 w-full pt-12 pb-8 px-6">
         <div className="w-full max-w-5xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-normal text-gray-100 mb-3">
+          <h1 className="text-3xl md:text-[44px] lg:text-[32px] font-serif text-white mb-4 tracking-wide opacity-90">
             Yalnız değilsin.
           </h1>
-          <p className="text-gray-400 text-base">
-            Belki senin bir cümlen, birinin gecesini aydınlatır.
+          <p className="text-[#94a3b8] text-[15px] font-medium tracking-wide">
+            Uykuyu Unutmuş Bir İnsana İyi Geceler Diyemezsin
           </p>
         </div>
       </header>
 
       <main className="relative z-10 w-full pb-32 px-6">
         <div className="w-full max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 w-full">
             {mockPosts.map((post) => (
-              <PostCard key={post.id} {...post} />
+              <div key={post.id} className="break-inside-avoid mb-5">
+                <PostCard {...post} />
+              </div>
             ))}
           </div>
         </div>
       </main>
 
-      <BottomNav onOpenShareAction={() => setIsShareModalOpen(true)} />
-
-      <ShareModal 
-        isOpen={isShareModalOpen} 
-        onClose={() => setIsShareModalOpen(false)} 
-      />
     </div>
   );
 }

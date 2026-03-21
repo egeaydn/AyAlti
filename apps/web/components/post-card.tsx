@@ -26,25 +26,25 @@ export function PostCard({ id, content, repliesCount, createdAt }: PostCardProps
 
   return (
     <div 
-      className="group relative bg-[#1a1f2e]/60 backdrop-blur-sm rounded-2xl p-5 
-                 border border-white/5 hover:border-white/10 w-full h-full
-                 transition-all duration-300 cursor-pointer flex flex-col"
+      className="group relative bg-(--bg-card) rounded-[28px] p-6 
+                 border border-(--border-subtle) hover:bg-(--bg-card-hover) w-full h-full
+                 transition-all duration-300 cursor-pointer flex flex-col shadow-lg shadow-black/20"
       onClick={() => window.location.href = `/post/${id}`}
     >
       {/* İçerik */}
-      <div className="mb-4 flex-1">
-        <p className="text-gray-200/90 leading-relaxed whitespace-pre-wrap text-[15px]">
+      <div className="mb-6 flex-1">
+        <p className="text-[#e2e8f0] leading-relaxed whitespace-pre-wrap text-[15px] font-medium tracking-wide">
           {content}
         </p>
       </div>
 
       {/* Alt kısım: zaman ve cevap sayısı */}
-      <div className="flex items-center justify-between text-gray-500 text-sm mt-auto">
+      <div className="flex items-center justify-between text-[#64748b] text-[13px] mt-auto font-medium">
         <span>{getTimeAgo(createdAt)}</span>
         
-        <div className="flex items-center gap-1.5">
-          <MessageCircle className="w-4 h-4" />
-          <span>{repliesCount}</span>
+        <div className="flex items-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+          <MessageCircle className="w-[15px] h-[15px]" />
+          <span>{repliesCount > 0 ? repliesCount : ""}</span>
         </div>
       </div>
     </div>
