@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
+import { supabase, getAuthorId } from "../lib/supabase";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -30,18 +31,35 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
   const [content, setContent] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   if (!isOpen) return null;
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!content.trim() || !selectedMood) return;
     
-    // TODO: API çağrısı yapılacak
-    console.log({ content, mood: selectedMood });
+    setIsSubmitting(true);
+    const author_id = getAuthorId();
+    
+    const { error } = await supabase
+      .from("posts")
+      .insert([{ content: content.trim(), mood: selectedMood, author_id }]);
+
+    setIsSubmitting(false);
+
+    if (error) {
+      console.error("Paylaşım hatası:", error);
+      alert("Bir hata oluştu, lütfen daha sonra tekrar deneyin.");
+      return;
+    }
     
     // Formu temizle ve kapat
     setContent("");
     setSelectedMood("");
     onClose();
+    
+    // Ana sayfadaki listeyi yenilemesi için event fırlat
+    window.dispatchEvent(new Event("postCreated"));
   };
 
   return (
@@ -114,14 +132,14 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
           {/* Paylaş butonu */}
           <button
             onClick={handleShare}
-            disabled={!content.trim() || !selectedMood}
+            disabled={!content.trim() || !selectedMood || isSubmitting}
             className="w-full py-3.5 bg-gradient-to-r from-[var(--accent-moon)] to-[var(--accent-glow)]
                        text-[var(--bg-midnight)] font-semibold rounded-2xl
                        shadow-[0_0_25px_rgba(125,211,252,0.3)] hover:shadow-[0_0_35px_rgba(125,211,252,0.4)]
                        hover:scale-[1.02] transition-all duration-200
                        disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            Paylaş
+            {isSubmitting ? "Paylaşılıyor..." : "Paylaş"}
           </button>
         </div>
       </div>
