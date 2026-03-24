@@ -9,9 +9,10 @@ export interface PostCardProps {
   nickname: string;
   repliesCount: number;
   createdAt: Date;
+  onClick?: () => void;
 }
 
-export function PostCard({ id, content, repliesCount, createdAt }: PostCardProps) {
+export function PostCard({ id, content, repliesCount, createdAt, onClick }: PostCardProps) {
   const getTimeAgo = (date: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
@@ -28,7 +29,7 @@ export function PostCard({ id, content, repliesCount, createdAt }: PostCardProps
       className="group relative bg-(--bg-card) rounded-[18px] p-5 overflow-hidden
                  border border-(--border-subtle) hover:bg-(--bg-card-hover) w-full
                  transition-colors duration-300 cursor-pointer flex flex-col"
-      onClick={() => window.location.href = `/post/${id}`}
+      onClick={onClick || (() => window.location.href = `/post/${id}`)}
     >
       <div className="mb-5 flex-1">
         <p className="text-[#cbd5e1] leading-[1.6] whitespace-pre-wrap break-all text-[14px] font-normal tracking-[0.015em]">

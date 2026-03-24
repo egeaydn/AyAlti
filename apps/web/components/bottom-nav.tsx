@@ -12,21 +12,19 @@ export function BottomNav({ onOpenShareAction }: { onOpenShareAction: () => void
   const tabs = [
     { name: "Akış", path: "/", icon: Home },
     { name: "Paylaş", action: onOpenShareAction, icon: Plus },
-    { name: "Paylaşımlarım ve Yorumlarım", path: "/profile", icon: User }
+    { name: "Paylaşımlarım", path: "/ShareAndComments", icon: User }
   ];
 
   useEffect(() => {
-    if (pathname === '/profile') setActiveIndex(2);
+    if (pathname === '/ShareAndComments') setActiveIndex(2);
     else if (pathname === '/') setActiveIndex(0);
   }, [pathname]);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 pb-safe pointer-events-none">
       <div className="mx-auto flex justify-center pb-8 px-4 w-full">
-        {/* max-w-[500px] ile tüm şerit ekranı çok kaplamasın. flex ve w-full kullanarak tüm ekranlara akıllıca sığsın */}
         <div className="relative flex w-full max-w-[460px] items-center bg-[#0d0f14]/80 backdrop-blur-2xl p-1.5 rounded-full border border-white/5 shadow-2xl pointer-events-auto">
           
-          {/* Sliding target background wrapper */}
           <div className="absolute left-1.5 right-1.5 top-1.5 bottom-1.5 pointer-events-none">
             <div 
               className="w-1/3 h-full transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"

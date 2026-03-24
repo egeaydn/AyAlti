@@ -1,13 +1,14 @@
 "use client";
 
 import { PostCard } from "@/components/post-card";
-
+import { PostDetailModal } from "@/components/post-detail-modal";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
 export default function Page() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPost, setSelectedPost] = useState<any>(null);
 
   const fetchPosts = async () => {
     try {
@@ -54,7 +55,7 @@ export default function Page() {
       <header className="relative z-10 w-full pt-12 pb-8 px-6">
         <div className="w-full max-w-5xl mx-auto text-center">
           <h1 className="text-3xl md:text-[44px] lg:text-[32px] font-serif text-white mb-4 tracking-wide opacity-90">
-            Yalnız değilsin.
+           Uykusuz Değilsin
           </h1>
           <p className="text-[#94a3b8] text-[15px] font-medium tracking-wide">
             Uykuyu Unutmuş Bir İnsana İyi Geceler Diyemezsin
@@ -72,7 +73,7 @@ export default function Page() {
           <div className="w-full max-w-6xl mx-auto columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {posts.map((post) => (
               <div key={post.id} className="break-inside-avoid mb-4">
-                <PostCard {...post} />
+                <PostCard {...post} onClick={() => setSelectedPost(post)} />
               </div>
             ))}
           </div>
@@ -83,7 +84,12 @@ export default function Page() {
         )}
       </main>
       </div>
+
+      <PostDetailModal 
+        isOpen={!!selectedPost}
+        onClose={() => setSelectedPost(null)}
+        post={selectedPost}
+      />
     </div>
   );
 }
-
