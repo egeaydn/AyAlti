@@ -63,24 +63,24 @@ export default function Page() {
       </header>
 
       <main className="relative z-10 w-full pb-32 px-6">
-        <div className="w-full max-w-5xl mx-auto">
-            {loading ? (
-              <div className="w-full col-span-1 sm:col-span-2 lg:col-span-3 text-center py-10 opacity-60 text-white flex flex-col items-center gap-3">
-                <div className="w-6 h-6 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
-                Dertler yükleniyor...
-              </div>
-            ) : posts.length > 0 ? (
-              posts.map((post) => (
-                <div key={post.id} className="break-inside-avoid mb-5">
-                  <PostCard {...post} />
-                </div>
-              ))
-            ) : (
-              <div className="w-full col-span-1 sm:col-span-2 lg:col-span-3 text-center py-10 opacity-60 text-white">
-                Henüz hiçbir dert girilmemiş. İlk içini döken sen ol!
-              </div>
-            )}
+        {loading ? (
+          <div className="w-full max-w-5xl mx-auto text-center py-10 opacity-60 text-white flex flex-col items-center gap-3">
+            <div className="w-6 h-6 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
+            Dertler yükleniyor...
           </div>
+        ) : posts.length > 0 ? (
+          <div className="w-full max-w-6xl mx-auto columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+            {posts.map((post) => (
+              <div key={post.id} className="break-inside-avoid mb-4">
+                <PostCard {...post} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full max-w-5xl mx-auto text-center py-10 opacity-60 text-white">
+            Henüz hiçbir dert girilmemiş. İlk içini döken sen ol!
+          </div>
+        )}
       </main>
       </div>
     </div>

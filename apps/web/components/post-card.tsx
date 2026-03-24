@@ -25,13 +25,13 @@ export function PostCard({ id, content, repliesCount, createdAt }: PostCardProps
 
   return (
     <div 
-      className="group relative bg-(--bg-card) rounded-[18px] p-5 
-                 border border-(--border-subtle) hover:bg-(--bg-card-hover) w-full h-full
+      className="group relative bg-(--bg-card) rounded-[18px] p-5 overflow-hidden
+                 border border-(--border-subtle) hover:bg-(--bg-card-hover) w-full
                  transition-colors duration-300 cursor-pointer flex flex-col"
       onClick={() => window.location.href = `/post/${id}`}
     >
       <div className="mb-5 flex-1">
-        <p className="text-[#cbd5e1] leading-[1.6] whitespace-pre-wrap text-[14px] font-normal tracking-[0.015em]">
+        <p className="text-[#cbd5e1] leading-[1.6] whitespace-pre-wrap break-all text-[14px] font-normal tracking-[0.015em]">
           {content}
         </p>
       </div>
