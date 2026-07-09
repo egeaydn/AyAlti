@@ -2,52 +2,13 @@
 
 import { PostCard } from "@/components/post-card";
 import { PostDetailModal } from "@/components/post-detail-modal";
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { useState } from "react";
+import { usePosts } from "@/hooks/usePosts";
+import { Post } from "@/lib/types";
 
 export default function Page() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPost, setSelectedPost] = useState<any>(null);
-
-  const fetchPosts = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-        
-      if (error) throw error;
-      
-      if (data) {
-        const mappedPosts = data.map((item: any) => ({
-          id: item.id,
-          content: item.content,
-          mood: item.mood,
-          nickname: "Anonim",
-          repliesCount: item.replies_count || 0,
-          createdAt: new Date(item.created_at),
-        }));
-        setPosts(mappedPosts);
-      }
-    } catch (err) {
-      console.error("Gönderiler çekilirken hata:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-
-    const handlePostCreated = () => {
-      fetchPosts();
-    };
-
-    window.addEventListener("postCreated", handlePostCreated);
-    return () => window.removeEventListener("postCreated", handlePostCreated);
-  }, []);
+  const { posts, loading } = usePosts();
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   return (
     <div>
@@ -89,7 +50,7 @@ export default function Page() {
         </main>
       </div>
 
-      <PostDetailModal 
+      <PostDetailModal
         isOpen={!!selectedPost}
         onClose={() => setSelectedPost(null)}
         post={selectedPost}

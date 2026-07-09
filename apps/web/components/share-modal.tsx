@@ -2,45 +2,27 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
-import { supabase, getAuthorId } from "../lib/supabase";
+import { supabase, getAuthorId } from "@/lib/supabase";
+import { Mood, MOODS, MOOD_COLORS } from "@/lib/types";
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const moods = [
-  "Yorgunum",
-  "Kırgınım",
-  "Kaygılıyım",
-  "Öfkeliyim",
-  "Boşluktayım",
-  "Sadece anlatmak istiyorum",
-];
-
-const moodColors: Record<string, string> = {
-  "Yorgunum": "border-blue-500/50 text-blue-300 hover:bg-blue-500/10",
-  "Kırgınım": "border-purple-500/50 text-purple-300 hover:bg-purple-500/10",
-  "Kaygılıyım": "border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10",
-  "Öfkeliyim": "border-red-500/50 text-red-300 hover:bg-red-500/10",
-  "Boşluktayım": "border-gray-500/50 text-gray-300 hover:bg-gray-500/10",
-  "Sadece anlatmak istiyorum": "border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10",
-};
-
 export function ShareModal({ isOpen, onClose }: ShareModalProps) {
   const [content, setContent] = useState("");
-  const [selectedMood, setSelectedMood] = useState("");
-
+  const [selectedMood, setSelectedMood] = useState<Mood | "">("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
   const handleShare = async () => {
     if (!content.trim() || !selectedMood) return;
-    
+
     setIsSubmitting(true);
     const author_id = getAuthorId();
-    
+
     const { error } = await supabase
       .from("posts")
       .insert([{ content: content.trim(), mood: selectedMood, author_id }]);
@@ -52,29 +34,27 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
       alert("Bir hata oluştu, lütfen daha sonra tekrar deneyin.");
       return;
     }
-    
-    // Formu temizle ve kapat
+
     setContent("");
     setSelectedMood("");
     onClose();
-    
-    // Ana sayfadaki listeyi yenilemesi için event fırlat
+
     window.dispatchEvent(new Event("postCreated"));
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-2xl mx-4 mb-24 sm:mb-0 bg-[var(--bg-card)] backdrop-blur-xl 
+      <div className="relative z-10 w-full max-w-2xl mx-4 mb-24 sm:mb-0 bg-[var(--bg-card)] backdrop-blur-xl
                       rounded-3xl border border-[var(--border-subtle)] shadow-[0_0_50px_rgba(125,211,252,0.2)]
                       animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 duration-300">
-        
+
         {/* Başlık */}
         <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
           <div>
@@ -87,7 +67,7 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] 
+            className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)]
                        hover:bg-[var(--bg-card-hover)] rounded-full transition-all"
           >
             <X className="w-5 h-5" />
@@ -103,7 +83,7 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
             placeholder="Yargılanmadan buraya yazabilirsin..."
             className="w-full min-h-[160px] bg-[var(--bg-midnight)]/50 text-[var(--text-primary)]
                        placeholder:text-[var(--text-muted)] rounded-2xl p-4 border border-[var(--border-subtle)]
-                       focus:border-[var(--accent-moon)]/50 focus:outline-none focus:ring-2 
+                       focus:border-[var(--accent-moon)]/50 focus:outline-none focus:ring-2
                        focus:ring-[var(--accent-moon)]/20 resize-none transition-all"
           />
 
@@ -113,13 +93,13 @@ export function ShareModal({ isOpen, onClose }: ShareModalProps) {
               Şu an nasıl hissediyorsun?
             </p>
             <div className="grid grid-cols-2 gap-2">
-              {moods.map((mood) => (
+              {MOODS.map((mood) => (
                 <button
                   key={mood}
                   onClick={() => setSelectedMood(mood)}
                   className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-all
-                    ${selectedMood === mood 
-                      ? `${moodColors[mood]} bg-opacity-20 ring-2 ring-current ring-opacity-30` 
+                    ${selectedMood === mood
+                      ? `${MOOD_COLORS[mood]} bg-opacity-20 ring-2 ring-current ring-opacity-30`
                       : `border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--accent-moon)]/30`
                     }`}
                 >

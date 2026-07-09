@@ -2,23 +2,18 @@
 
 import { X, Send, Clock, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import { supabase, getAuthorId } from "../lib/supabase";
+import { supabase, getAuthorId } from "@/lib/supabase";
+import { CommentDetail, Post } from "@/lib/types";
+import { getTimeAgo } from "@/lib/utils";
 
 interface PostDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  post: {
-    id: string;
-    content: string;
-    mood?: string;
-    createdAt: Date;
-    nickname: string;
-    repliesCount: number;
-  } | null;
+  post: Pick<Post, "id" | "content" | "mood" | "createdAt" | "nickname" | "repliesCount"> | null;
 }
 
 export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps) {
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<CommentDetail[]>([]);
   const [loading, setLoading] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,6 +22,7 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
     if (isOpen && post) {
       fetchComments();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, post]);
 
   const fetchComments = async () => {
@@ -38,9 +34,9 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
         .select("*")
         .eq("post_id", post.id)
         .order("created_at", { ascending: true });
-        
+
       if (error) throw error;
-      if (data) setComments(data);
+      if (data) setComments(data as CommentDetail[]);
     } catch (err) {
       console.error("Yorumlar çekilirken hata:", err);
     } finally {
@@ -50,17 +46,13 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
 
   const handleSendComment = async () => {
     if (!newComment.trim() || !post) return;
-    
+
     setIsSubmitting(true);
     const author_id = getAuthorId();
-    
+
     const { error } = await supabase
       .from("comments")
-      .insert([{ 
-        post_id: post.id, 
-        content: newComment.trim(), 
-        author_id 
-      }]);
+      .insert([{ post_id: post.id, content: newComment.trim(), author_id }]);
 
     setIsSubmitting(false);
 
@@ -69,36 +61,25 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
       alert("Bir hata oluştu, lütfen daha sonra tekrar deneyin.");
       return;
     }
-    
+
     setNewComment("");
     fetchComments();
-    window.dispatchEvent(new Event("postCreated")); // To refresh counts globally if needed
+    window.dispatchEvent(new Event("postCreated"));
   };
 
   if (!isOpen || !post) return null;
 
-  const getTimeAgo = (date: Date | string) => {
-    const d = new Date(date);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - d.getTime()) / (1000 * 60));
-    if (diffInMinutes < 60) return `${diffInMinutes}dk önce`;
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours}s önce`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays}g önce`;
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
-      <div 
+      <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] rounded-[24px] border border-[var(--border-subtle)] 
+      <div className="relative w-full max-w-2xl bg-[var(--bg-card)] rounded-[24px] border border-[var(--border-subtle)]
                       shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]
                       animate-in fade-in zoom-in-95 duration-200">
-        
+
         {/* Header / Current Post */}
         <div className="shrink-0 p-6 border-b border-[var(--border-subtle)] relative bg-black/10">
           <button
@@ -107,7 +88,7 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
           >
             <X className="w-5 h-5" />
           </button>
-          
+
           <div className="flex flex-col gap-3 pr-8">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#64748b] to-[#334155] flex items-center justify-center text-xs font-bold text-white shadow-inner">
@@ -140,7 +121,11 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
             </div>
           ) : comments.length > 0 ? (
             comments.map((comment, index) => (
-              <div key={comment.id || index} className="flex gap-3 animate-in slide-in-from-bottom-2 fade-in duration-300" style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'both' }}>
+              <div
+                key={comment.id}
+                className="flex gap-3 animate-in slide-in-from-bottom-2 fade-in duration-300"
+                style={{ animationDelay: `${index * 50}ms`, animationFillMode: "both" }}
+              >
                 <div className="w-7 h-7 rounded-full bg-[#1e293b] flex items-center justify-center text-[10px] font-bold text-[#94a3b8] shrink-0 mt-1">
                   A
                 </div>
@@ -172,13 +157,13 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSendComment();
                 }
               }}
               placeholder="Fikrini paylaş (Anonim)..."
-              className="w-full bg-black/20 text-[#e2e8f0] placeholder:text-[#64748b] 
+              className="w-full bg-black/20 text-[#e2e8f0] placeholder:text-[#64748b]
                          rounded-full pl-5 pr-12 py-3.5 border border-white/10
                          focus:outline-none focus:border-[#7dd3fc]/30 focus:bg-black/30 transition-all text-sm"
               disabled={isSubmitting}
@@ -186,15 +171,15 @@ export function PostDetailModal({ isOpen, onClose, post }: PostDetailModalProps)
             <button
               onClick={handleSendComment}
               disabled={!newComment.trim() || isSubmitting}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full 
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full
                          bg-[#7dd3fc]/10 text-[#7dd3fc] hover:bg-[#7dd3fc]/20 hover:scale-105 active:scale-95
                          disabled:opacity-50 disabled:grayscale disabled:hover:scale-100 disabled:cursor-not-allowed
                          transition-all"
             >
               {isSubmitting ? (
-                 <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
               ) : (
-                 <Send className="w-4 h-4" />
+                <Send className="w-4 h-4" />
               )}
             </button>
           </div>

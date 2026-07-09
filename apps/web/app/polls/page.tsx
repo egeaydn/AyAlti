@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, getAuthorId } from "../../lib/supabase";
+import { supabase, getAuthorId } from "@/lib/supabase";
 import { PollCard } from "@/components/poll-card";
 import { CreatePollModal } from "@/components/create-poll-modal";
 import { Plus } from "lucide-react";
+import { Poll, PollRow, mapPollRow } from "@/lib/types";
 
 export default function PollsPage() {
-  const [polls, setPolls] = useState<any[]>([]);
+  const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -16,8 +17,7 @@ export default function PollsPage() {
       setLoading(true);
       const author_id = getAuthorId();
 
-      // Anketleri çek
-      const { data: pollsData, error: pollsError } = await supabase
+      const { data, error } = await supabase
         .from("polls")
         .select(`
           *,
@@ -25,25 +25,14 @@ export default function PollsPage() {
           poll_votes (id, author_id)
         `)
         .order("created_at", { ascending: false });
-        
-      if (pollsError) throw pollsError;
-      
-      if (pollsData) {
-        const mappedPolls = pollsData.map((item: any) => {
-          const userVoted = item.poll_votes?.some((v: any) => v.author_id === author_id);
-          return {
-            id: item.id,
-            question: item.question,
-            totalVotes: item.total_votes || 0,
-            options: item.poll_options || [],
-            hasVotedProp: userVoted,
-            createdAt: new Date(item.created_at),
-          };
-        });
-        setPolls(mappedPolls);
+
+      if (error) throw error;
+
+      if (data) {
+        setPolls((data as PollRow[]).map((row) => mapPollRow(row, author_id)));
       }
-    } catch (err: any) {
-      console.error("Anketler çekilirken hata:", err.message || err);
+    } catch (err) {
+      console.error("Anketler çekilirken hata:", err);
     } finally {
       setLoading(false);
     }
@@ -52,12 +41,10 @@ export default function PollsPage() {
   useEffect(() => {
     fetchPolls();
 
-    const handlePollCreated = () => {
-      fetchPolls();
-    };
-
+    const handlePollCreated = () => fetchPolls();
     window.addEventListener("pollCreated", handlePollCreated);
     return () => window.removeEventListener("pollCreated", handlePollCreated);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -73,7 +60,7 @@ export default function PollsPage() {
                 Düşünceni belirt, kalabalığın nabzını tut.
               </p>
             </div>
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center gap-2 glass-card hover:scale-105 text-[--teal-accent] px-5 py-3 rounded-2xl transition-all duration-300 font-semibold text-sm shadow-lg shadow-teal-500/10 group"
             >
@@ -92,11 +79,7 @@ export default function PollsPage() {
           ) : polls.length > 0 ? (
             <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
               {polls.map((poll) => (
-                <PollCard
-                  key={poll.id}
-                  {...poll}
-                  onVote={() => {}} 
-                />
+                <PollCard key={poll.id} {...poll} onVote={() => {}} />
               ))}
             </div>
           ) : (
@@ -108,7 +91,7 @@ export default function PollsPage() {
         </main>
       </div>
 
-      <CreatePollModal 
+      <CreatePollModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
